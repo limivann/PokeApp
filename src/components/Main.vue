@@ -32,7 +32,6 @@ export default defineComponent({
 			errorMessage.value = "";
 			try {
 				const data = await getSpecificPokemonData(pokemon.value);
-				console.log(data);
 				pokemonData.value = data ?? {};
 			} catch (error: any) {
 				errorMessage.value = error.message;

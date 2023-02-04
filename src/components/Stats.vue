@@ -1,26 +1,26 @@
 <template lang="">
 	<table class="statsTable">
-		<tr>
+		<tr class="hp">
 			<td>Hit Points</td>
 			<td>{{ stats?.hp }}</td>
 		</tr>
-		<tr>
+		<tr class="attack">
 			<td>Attack</td>
 			<td>{{ stats?.attack }}</td>
 		</tr>
-		<tr>
+		<tr class="defense">
 			<td>Defense</td>
 			<td>{{ stats?.defense }}</td>
 		</tr>
-		<tr>
+		<tr class="specialAttack">
 			<td>Special Attack</td>
 			<td>{{ stats?.spAtk }}</td>
 		</tr>
-		<tr>
+		<tr class="specialDefense">
 			<td>Special Defense</td>
 			<td>{{ stats?.spDef }}</td>
 		</tr>
-		<tr>
+		<tr class="speed">
 			<td>Speed</td>
 			<td>{{ stats?.speed }}</td>
 		</tr>

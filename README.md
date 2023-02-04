@@ -1,18 +1,40 @@
-# Vue 3 + TypeScript + Vite
+# PokeApp
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Description
 
-## Recommended IDE Setup
+PokeApp is a web based Pokedex that utilizes the PokeAPI to display information about all the different Pokemon species in the Pokemon world. It has a clean and user-friendly interface that allows users to easily search and browse through all the different Pokemon species. Each Pokemon has its own unique profile that includes information such as its type and stats.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Technologies Used
 
-## Type Support For `.vue` Imports in TS
+- Vuejs
+- Typescript
+- Vue Router
+- Jest
+- Vue Tests Utils
+- PokeApi
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## How to run locally
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+> To further develop this project, clone this repo and run the following
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+```
+yarn install
+yarn dev
+```
+
+## Design considerations
+
+#### Top Level Directory Layout
+
+```terminal
+.
+├── assets              # images, fonts, icons
+├── components          # reusable react components
+├── constants           # themes
+├── firebase            # backend
+├── screens             # user interface
+├── services            # api requests
+├── utils               # helper functions
+├── LICENSE
+└── README.md
+```

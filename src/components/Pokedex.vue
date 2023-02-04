@@ -2,15 +2,15 @@
 	<div class="pokedexContainer">
 		<img :src="pokedexImg" alt="Pokedex Image" class="pokedexImg" />
 		<img
-			:src="pokemonData.imgUrl"
+			:src="pokemonData?.imgUrl"
 			alt="Example pokemon"
 			class="pokemonImg"
 			:style="{
 				display: pokemonData?.name ? 'block' : 'none',
 			}"
 		/>
-		<p class="pokemonName">{{ pokemonData.name }}</p>
-		<p class="pokemonType">{{ getMainTypeIcon(pokemonData.type) }}</p>
+		<p class="pokemonName">{{ pokemonData?.name }}</p>
+		<p class="pokemonType">{{ getMainTypeIcon(pokemonData?.type) }}</p>
 		<button
 			class="moreDetails"
 			@click="goToDetailsPage"
@@ -38,7 +38,9 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const pokemonData = computed(() => props.pokemonData);
+		const pokemonData = computed(() => {
+			return { ...props.pokemonData };
+		});
 		const pokedexImg = ref(pokedex);
 		const exampleImg = ref(examplePokemon);
 		const router = useRouter();

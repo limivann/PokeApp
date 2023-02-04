@@ -16,6 +16,7 @@ export const getSpecificPokemonData = async (param: string | number) => {
 		return { ...currentPokemon };
 	} catch (error) {
 		console.log("not found");
+		console.log(error);
 		throw new Error("Pokemon not found");
 	}
 };

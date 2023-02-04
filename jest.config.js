@@ -7,5 +7,3 @@ module.exports = {
 			"jest-transform-stub",
 	},
 };
-
-export {};
