@@ -15,7 +15,6 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import examplePokemon from "../assets/examplePokemon.png";
 import { PokemonData } from "../interfaces";
 import Pokedex from "./Pokedex.vue";
 import { getSpecificPokemonData } from "../api";
@@ -26,8 +25,6 @@ export default defineComponent({
 	},
 	setup() {
 		const pokemon = ref<string>("");
-		const exampleImg = ref(examplePokemon);
-
 		const pokemonData = ref<PokemonData>({});
 		const errorMessage = ref<string>("");
 
@@ -35,6 +32,7 @@ export default defineComponent({
 			errorMessage.value = "";
 			try {
 				const data = await getSpecificPokemonData(pokemon.value);
+				console.log(data);
 				pokemonData.value = data ?? {};
 			} catch (error: any) {
 				errorMessage.value = error.message;
@@ -45,7 +43,6 @@ export default defineComponent({
 		return {
 			pokemon,
 			searchPokemon,
-			exampleImg,
 			pokemonData,
 			errorMessage,
 		};

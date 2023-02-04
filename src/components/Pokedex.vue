@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, PropType, ref } from "vue";
 import pokedex from "../assets/pokedex.png";
 import examplePokemon from "../assets/examplePokemon.png";
 import { useRouter } from "vue-router";
@@ -38,6 +38,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const pokemonData = computed(() => props.pokemonData);
 		const pokedexImg = ref(pokedex);
 		const exampleImg = ref(examplePokemon);
 		const router = useRouter();
@@ -115,6 +116,7 @@ export default defineComponent({
 			exampleImg,
 			goToDetailsPage,
 			getMainTypeIcon,
+			pokemonData,
 		};
 	},
 });
