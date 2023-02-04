@@ -2,7 +2,7 @@
 	<div class="typeBox">{{ typeText }}</div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent } from "vue";
 
 export default defineComponent({
 	props: {
@@ -11,7 +11,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const typeText = ref(props.typeText);
+		const typeText = computed(() => props.typeText);
 		return {
 			typeText,
 		};
@@ -20,11 +20,14 @@ export default defineComponent({
 </script>
 <style scoped>
 .typeBox {
-	width: 100px;
-	background-color: aquamarine;
+	width: 120px;
+	background-color: #f64171;
+	color: white;
 	padding: 0.75rem 0.75rem;
-	color: black;
 	font-size: 1.2rem;
-	font-weight: 500;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	border-radius: 5px;
 }
 </style>

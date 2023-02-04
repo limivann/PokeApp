@@ -1,7 +1,7 @@
 <template lang="">
 	<h1>PokeApp</h1>
 	<h2>Enter A Pokemon Name or Pokedex Number</h2>
-	<form @submit.prevent="searchApi" class="inputForm">
+	<form @submit.prevent="searchPokemon" class="inputForm">
 		<input
 			type="text"
 			v-model="pokemon"
@@ -10,29 +10,54 @@
 		/>
 		<button type="submit" class="btn">Search</button>
 	</form>
+	<p class="errorMessage">{{ errorMessage }}</p>
+	<Pokedex :pokemonData="pokemonData" />
 </template>
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import examplePokemon from "../assets/examplePokemon.png";
+import { PokemonData } from "../interfaces";
+import Pokedex from "./Pokedex.vue";
+import { getSpecificPokemonData } from "../api";
 
 export default defineComponent({
+	components: {
+		Pokedex,
+	},
 	setup() {
 		const pokemon = ref<string>("");
 		const exampleImg = ref(examplePokemon);
-		function searchApi() {
-			// search
-			console.log("searching");
-		}
+
+		const pokemonData = ref<PokemonData>({});
+		const errorMessage = ref<string>("");
+
+		const searchPokemon = async () => {
+			errorMessage.value = "";
+			try {
+				const data = await getSpecificPokemonData(pokemon.value);
+				pokemonData.value = data ?? {};
+			} catch (error: any) {
+				errorMessage.value = error.message;
+				pokemonData.value = {};
+			}
+		};
 
 		return {
 			pokemon,
-			searchApi,
+			searchPokemon,
 			exampleImg,
+			pokemonData,
+			errorMessage,
 		};
 	},
 });
 </script>
 <style scoped>
+.errorMessage {
+	color: #f64171;
+	font-size: 1.2rem;
+	letter-spacing: 0.05em;
+}
 .inputForm {
 	display: flex;
 	align-items: center;

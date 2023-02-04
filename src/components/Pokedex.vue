@@ -1,34 +1,120 @@
 <template lang="">
 	<div class="pokedexContainer">
 		<img :src="pokedexImg" alt="Pokedex Image" class="pokedexImg" />
-		<img :src="exampleImg" alt="Example pokemon" class="pokemonImg" />
-		<p class="pokemonName">Butterfly</p>
-		<p class="pokemonType">🌱</p>
-		<button class="moreDetails" @click="goToDetailsPage">More Details</button>
+		<img
+			:src="pokemonData.imgUrl"
+			alt="Example pokemon"
+			class="pokemonImg"
+			:style="{
+				display: pokemonData?.name ? 'block' : 'none',
+			}"
+		/>
+		<p class="pokemonName">{{ pokemonData.name }}</p>
+		<p class="pokemonType">{{ getMainTypeIcon(pokemonData.type) }}</p>
+		<button
+			class="moreDetails"
+			@click="goToDetailsPage"
+			:style="{
+				display: pokemonData?.name ? 'block' : 'none',
+			}"
+		>
+			More Details
+		</button>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import pokedex from "../assets/pokedex.png";
 import examplePokemon from "../assets/examplePokemon.png";
 import { useRouter } from "vue-router";
+import { PokemonData } from "../interfaces";
 
 export default defineComponent({
 	name: "Pokedex",
-	setup() {
+	props: {
+		pokemonData: {
+			type: Object as PropType<PokemonData>,
+		},
+	},
+	setup(props) {
 		const pokedexImg = ref(pokedex);
 		const exampleImg = ref(examplePokemon);
 		const router = useRouter();
 
 		const goToDetailsPage = () => {
-			router.push({ path: "/pokemon/1" });
+			router.push({ path: `/pokemon/${props.pokemonData?.id}` });
+		};
+
+		const getMainTypeIcon = () => {
+			const pokemonTypes = props.pokemonData?.types;
+			// could be undefined
+			let icon = "";
+			if (pokemonTypes && pokemonTypes[0]) {
+				switch (pokemonTypes[0]) {
+					case "water":
+						icon = "💧";
+						break;
+					case "rock":
+						icon = "🗿";
+						break;
+					case "fire":
+						icon = "🔥";
+						break;
+					case "grass":
+						icon = "🌱";
+						break;
+					case "flying":
+						icon = "🐦";
+						break;
+					case "fighting":
+						icon = "🥊";
+						break;
+					case "poison":
+						icon = "☠️";
+						break;
+					case "electric":
+						icon = "⚡";
+						break;
+					case "ground":
+						icon = "🌍";
+						break;
+					case "psychic":
+						icon = "🧠";
+						break;
+					case "ice":
+						icon = "❄️";
+						break;
+					case "bug":
+						icon = "🐞";
+						break;
+					case "ghost":
+						icon = "👻";
+						break;
+					case "steel":
+						icon = "⚙️";
+						break;
+					case "dragon":
+						icon = "💧";
+						break;
+					case "dark":
+						icon = "🌚";
+						break;
+					case "fairy":
+						icon = "🎠";
+						break;
+					default:
+						icon = "";
+				}
+			}
+			return icon;
 		};
 
 		return {
 			pokedexImg,
 			exampleImg,
 			goToDetailsPage,
+			getMainTypeIcon,
 		};
 	},
 });
@@ -103,5 +189,6 @@ export default defineComponent({
 	max-width: 10rem;
 	z-index: 3;
 	font-family: "Press Start 2P", "Courier New", Courier, monospace;
+	text-transform: capitalize;
 }
 </style>

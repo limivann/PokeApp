@@ -1,48 +1,155 @@
 <template lang="">
-	<div class="title">
-		<span class="name">Butterflee </span>
-		<span class="pokemonId">#0001</span>
+	<div v-if="currentPokemonData?.name == null">
+		<!-- Render the data here -->
+		<h1>Pokemon does not exist</h1>
 	</div>
-	<div class="otherPokemonContainer">
-		<button class="leftButton">
-			<ArrowLeftCircleOutlineIcon />#0024 Arbok
-		</button>
-		<button class="rightButton">
-			Raichu #0026
-			<ArrowRightCircleOutlineIcon />
-		</button>
-	</div>
-	<div class="details">
-		<img :src="exampleImg" alt="Pokemon Image" class="pokemonImg" />
-		<div class="typeContainer">
-			<h2 class="typeTitle">Type</h2>
-			<div class="types">
-				<Type v-for="(type, index) in types" :key="index" :typeText="type" />
+	<div v-else>
+		<div class="title">
+			<span class="name">{{ `${currentPokemonData?.name} ` }} </span>
+			<span class="pokemonId">{{
+				formatPokemonId(currentPokemonData?.id)
+			}}</span>
+		</div>
+		<div class="otherPokemonContainer">
+			<button
+				class="leftButton"
+				@click="navigatePrevOrNextPokemon(true)"
+				:style="{
+					display: prevPokemonData?.name ? 'flex' : 'none',
+				}"
+			>
+				<ArrowLeftCircleOutlineIcon />
+				<span class="">{{ formatPokemonId(prevPokemonData?.id) }}</span>
+				<span class="name">{{ `${prevPokemonData?.name} ` }} </span>
+			</button>
+			<button
+				class="rightButton"
+				@click="navigatePrevOrNextPokemon(false)"
+				:style="{
+					display: nextPokemonData?.name ? 'flex' : 'none',
+				}"
+			>
+				<span class="name">{{ `${nextPokemonData?.name} ` }} </span>
+				<span class="">{{ formatPokemonId(nextPokemonData?.id) }}</span>
+				<ArrowRightCircleOutlineIcon />
+			</button>
+		</div>
+		<div class="details">
+			<img
+				:src="currentPokemonData.imgUrl"
+				alt="Pokemon Image"
+				class="pokemonImg"
+			/>
+			<div class="typeAndStatsContainer">
+				<h2 class="typeTitle">Type</h2>
+				<div class="types">
+					<Type
+						v-for="(type, index) in currentPokemonData.types"
+						:key="index"
+						:typeText="type"
+					/>
+				</div>
+				<h2 class="typeTitle">Base Stats</h2>
+				<Stats :stats="currentPokemonData.stats" />
 			</div>
-			<h2 class="typeTitle">Stats</h2>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import examplePokemon from "../assets/examplePokemon.png";
+import { defineComponent, ref, reactive } from "vue";
+import Stats from "../components/Stats.vue";
 import ArrowLeftCircleOutlineIcon from "vue-material-design-icons/ArrowLeftCircleOutline.vue";
 import ArrowRightCircleOutlineIcon from "vue-material-design-icons/ArrowRightCircleOutline.vue";
 import Type from "../components/Type.vue";
+import { useRoute, useRouter } from "vue-router";
+import { getSpecificPokemonData, getPokemonNameId } from "../api";
+import { PokemonData, IShortPokemonData } from "../interfaces";
+
 export default defineComponent({
 	name: "Pokemon",
 	components: {
 		Type,
 		ArrowLeftCircleOutlineIcon,
 		ArrowRightCircleOutlineIcon,
+		Stats,
 	},
 	setup() {
-		const exampleImg = ref(examplePokemon);
-		const types = ref(["Electric", "Normal"]);
+		const route = useRoute();
+		const router = useRouter();
+		const currentPokemonData = ref<PokemonData>({});
+
+		const prevPokemonData = ref<IShortPokemonData | {}>({});
+		const nextPokemonData = ref<IShortPokemonData | {}>({});
+		const { id: currentPokemonId } = route.params;
+		const id = reactive({ currentPokemonId });
+
+		// check id pokemon exist
+		if (id == undefined) {
+			return;
+		}
+
+		const navigatePrevOrNextPokemon = async (prev: boolean) => {
+			if (typeof id.currentPokemonId !== "string") {
+				return;
+			}
+			if (prev) {
+				id.currentPokemonId = (parseInt(id.currentPokemonId) - 1).toString();
+			} else {
+				id.currentPokemonId = (parseInt(id.currentPokemonId) + 1).toString();
+			}
+			router.push({ path: `/pokemon/${id.currentPokemonId}` });
+			fetchData();
+			fetchPrevAndNextPokemonData();
+		};
+
+		const fetchData = async () => {
+			try {
+				if (typeof id.currentPokemonId !== "string") {
+					return;
+				}
+				const data = await getSpecificPokemonData(id.currentPokemonId);
+				currentPokemonData.value = data ?? {};
+				console.log(currentPokemonData.value);
+			} catch (error) {
+				// handle error
+			}
+		};
+
+		const fetchPrevAndNextPokemonData = async () => {
+			try {
+				if (typeof id.currentPokemonId !== "string") {
+					return;
+				}
+				const prevData = await getPokemonNameId(
+					Number(id.currentPokemonId) - 1
+				);
+				const nextData = await getPokemonNameId(
+					Number(id.currentPokemonId) + 1
+				);
+				prevPokemonData.value = prevData ?? {};
+				nextPokemonData.value = nextData ?? {};
+			} catch (error) {
+				console.error(error);
+			}
+		};
+
+		const formatPokemonId = (id: number): string => {
+			if (id) {
+				return "#" + id.toString().padStart(4, "0");
+			}
+			return "";
+		};
+
+		fetchData();
+		fetchPrevAndNextPokemonData();
+
 		return {
-			exampleImg,
-			types,
+			currentPokemonData,
+			prevPokemonData,
+			nextPokemonData,
+			formatPokemonId,
+			navigatePrevOrNextPokemon,
 		};
 	},
 });
@@ -55,6 +162,7 @@ export default defineComponent({
 }
 .name {
 	color: white;
+	text-transform: capitalize;
 }
 
 .pokemonId {
@@ -62,19 +170,23 @@ export default defineComponent({
 }
 
 .pokemonImg {
-	width: 400px;
-	height: 400px;
+	width: 375px;
+	height: 375px;
 }
 
 .details {
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	column-gap: 2rem;
 }
 
 .types {
 	display: flex;
 	column-gap: 1rem;
+}
+
+.typeAndStatsContainer {
+	min-width: 300px;
 }
 
 .typeTitle {
@@ -93,6 +205,7 @@ export default defineComponent({
 	display: flex;
 	justify-content: center;
 	column-gap: 0.5rem;
+	margin-right: auto;
 }
 
 .rightButton {
@@ -100,5 +213,6 @@ export default defineComponent({
 	display: flex;
 	justify-content: center;
 	column-gap: 0.5rem;
+	margin-left: auto;
 }
 </style>
