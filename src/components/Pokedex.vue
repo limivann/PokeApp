@@ -28,13 +28,13 @@ import { computed, defineComponent, PropType, ref } from "vue";
 import pokedex from "../assets/pokedex.png";
 import examplePokemon from "../assets/examplePokemon.png";
 import { useRouter } from "vue-router";
-import { PokemonData } from "../interfaces";
+import { IPokemonData } from "../interfaces";
 
 export default defineComponent({
 	name: "Pokedex",
 	props: {
 		pokemonData: {
-			type: Object as PropType<PokemonData>,
+			type: Object as PropType<IPokemonData>,
 		},
 	},
 	setup(props) {

@@ -15,7 +15,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { PokemonData } from "../interfaces";
+import { IPokemonData } from "../interfaces";
 import Pokedex from "./Pokedex.vue";
 import { getSpecificPokemonData } from "../api";
 
@@ -25,7 +25,7 @@ export default defineComponent({
 	},
 	setup() {
 		const pokemon = ref<string>("");
-		const pokemonData = ref<PokemonData>({});
+		const pokemonData = ref<IPokemonData>({});
 		const errorMessage = ref<string>("");
 
 		const searchPokemon = async () => {

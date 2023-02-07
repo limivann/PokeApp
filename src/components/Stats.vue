@@ -28,12 +28,12 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
-import { StatData } from "../interfaces";
+import { IStatData } from "../interfaces";
 
 export default defineComponent({
 	props: {
 		stats: {
-			type: Object as PropType<StatData>,
+			type: Object as PropType<IStatData>,
 		},
 	},
 	setup(props) {

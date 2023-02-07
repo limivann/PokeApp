@@ -1,9 +1,9 @@
 import { mount } from "@vue/test-utils";
 import Pokedex from "../components/Pokedex.vue";
-import { PokemonData } from "../interfaces";
+import { IPokemonData } from "../interfaces";
 
 describe("Pokedex component", () => {
-	const pokemonData: PokemonData = {
+	const pokemonData: IPokemonData = {
 		id: 12,
 		name: "butterfree",
 		imgUrl:

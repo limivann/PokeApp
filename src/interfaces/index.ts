@@ -1,12 +1,12 @@
-export interface PokemonData {
+export interface IPokemonData {
 	id?: number;
 	name?: string;
 	imgUrl?: string;
 	types?: string[];
-	stats?: StatData;
+	stats?: IStatData;
 }
 
-export interface StatData {
+export interface IStatData {
 	hp: number;
 	attack: number;
 	defense: number;

@@ -1,12 +1,13 @@
+import axios from "axios";
+import { IPokemonData, IStatData } from "../interfaces";
 export const POKEMON_API_BASE_URL = "https://pokeapi.co/api/v2/pokemon";
-import { PokemonData, StatData } from "../interfaces";
 
 export const getSpecificPokemonData = async (param: string | number) => {
 	// TODO: handle all type of invalid input
 	try {
-		const response = await fetch(`${POKEMON_API_BASE_URL}/${param}`);
-		const data = await response.json();
-		const currentPokemon: PokemonData = {
+		const response = await axios(`${POKEMON_API_BASE_URL}/${param}`);
+		const data = await response.data;
+		const currentPokemon: IPokemonData = {
 			id: data.id,
 			name: data.name,
 			imgUrl: data["sprites"]["other"]["official-artwork"]["front_default"],
@@ -15,24 +16,22 @@ export const getSpecificPokemonData = async (param: string | number) => {
 		};
 		return { ...currentPokemon };
 	} catch (error) {
-		console.log("not found");
-		console.log(error);
 		throw new Error("Pokemon not found");
 	}
 };
 
 export const getPokemonNameId = async (param: string | number) => {
 	try {
-		const response = await fetch(`${POKEMON_API_BASE_URL}/${param}`);
-		const data = await response.json();
+		const response = await axios(`${POKEMON_API_BASE_URL}/${param}`);
+		const data = await response.data;
 
-		const currentPokemon: PokemonData = {
+		const currentPokemon: IPokemonData = {
 			id: data.id,
 			name: data.name,
 		};
 		return { ...currentPokemon };
 	} catch (error) {
-		console.error(error);
+		throw new Error("Pokemon not found");
 	}
 };
 
@@ -45,7 +44,7 @@ function getTypes(types: any[]) {
 }
 
 function getStats(stats: any[]) {
-	const result: StatData = {
+	const result: IStatData = {
 		hp: 0,
 		attack: 0,
 		defense: 0,

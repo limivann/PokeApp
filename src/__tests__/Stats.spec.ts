@@ -1,9 +1,9 @@
 import { mount } from "@vue/test-utils";
 import Stats from "../components/Stats.vue";
-import { StatData } from "../interfaces";
+import { IStatData } from "../interfaces";
 
 describe("Stats component", () => {
-	const statsData: StatData = {
+	const statsData: IStatData = {
 		hp: 60,
 		attack: 45,
 		defense: 50,

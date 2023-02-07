@@ -64,7 +64,7 @@ import ArrowRightCircleOutlineIcon from "vue-material-design-icons/ArrowRightCir
 import Type from "../components/Type.vue";
 import { useRoute, useRouter } from "vue-router";
 import { getSpecificPokemonData, getPokemonNameId } from "../api";
-import { PokemonData, IShortPokemonData } from "../interfaces";
+import { IPokemonData, IShortPokemonData } from "../interfaces";
 
 export default defineComponent({
 	name: "Pokemon",
@@ -77,7 +77,7 @@ export default defineComponent({
 	setup() {
 		const route = useRoute();
 		const router = useRouter();
-		const currentPokemonData = ref<PokemonData>({});
+		const currentPokemonData = ref<IPokemonData>({});
 
 		const prevPokemonData = ref<IShortPokemonData | {}>({});
 		const nextPokemonData = ref<IShortPokemonData | {}>({});
@@ -112,25 +112,31 @@ export default defineComponent({
 				currentPokemonData.value = data ?? {};
 				console.log(currentPokemonData.value);
 			} catch (error) {
-				// handle error
+				console.error(error);
 			}
 		};
 
 		const fetchPrevAndNextPokemonData = async () => {
+			if (typeof id.currentPokemonId !== "string") {
+				return;
+			}
 			try {
-				if (typeof id.currentPokemonId !== "string") {
-					return;
-				}
 				const prevData = await getPokemonNameId(
 					Number(id.currentPokemonId) - 1
 				);
+				prevPokemonData.value = prevData ?? {};
+			} catch (error) {
+				// no prev pokemon
+				prevPokemonData.value = {};
+			}
+			try {
 				const nextData = await getPokemonNameId(
 					Number(id.currentPokemonId) + 1
 				);
-				prevPokemonData.value = prevData ?? {};
 				nextPokemonData.value = nextData ?? {};
 			} catch (error) {
-				console.error(error);
+				// no next pokemon
+				nextPokemonData.value = {};
 			}
 		};
 
